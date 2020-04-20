@@ -35,14 +35,16 @@ class TransactionsRepository {
   }
 
   public getBalance(): Balance {
+    const reducer = (accumulator: number, currentValue: number): number =>
+      accumulator + currentValue;
     const income = this.transactions
       .filter(item => item.type === 'income')
       .map(item => item.value)
-      .reduce((accumulator, currentValue) => accumulator + currentValue);
+      .reduce(reducer, 0);
     const outcome = this.transactions
       .filter(item => item.type === 'outcome')
       .map(item => item.value)
-      .reduce((accumulator, currentValue) => accumulator - currentValue);
+      .reduce(reducer, 0);
     const total = income - outcome;
     const balance = {
       income,
